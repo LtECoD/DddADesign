@@ -1,0 +1,38 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: 当前文件",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--seed", "99",
+                "--model", "nferruz/ProtGPT2",
+                "--save_dir", "./save/coarse",
+                "--train_file", "./data/processed/IPR035105.txt",
+                "--val_file", "./data/processed/IPR032724.txt",
+                "--cache_dir", "./cache",
+                "--lr", "5e-5",
+                "--batch_size", "32",
+                "--epochs", "3",
+            ]
+            // "args":[
+            //     "--model_name_or_path", "nferruz/ProtGPT2",
+            //     "--train_file", "./data/example.txt",
+            //     "--validation_file", "./data/example.txt",
+            //     "--tokenizer_name", "nferruz/ProtGPT2",
+            //     "--do_train",
+            //     "--do_eval",
+            //     "--output_dir", "./save",
+            //     "--overwrite_output_dir",
+            //     "--learning_rate","1e-06"
+            // ]
+        }
+    ]
+}
