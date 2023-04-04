@@ -2,6 +2,20 @@
 
 # export CUDA_VISIBLE_DEVICES="2,3"
 
+# # validate protgpt2
+# python source/fine-tunning.py \
+#     --seed 99 \
+#     --checkpoint nferruz/ProtGPT2 \
+#     \
+#     --train_file ./data/processed/IPR032724.fasta \
+#     --val_file ./data/processed/IPR032724.fasta \
+#     --cache_dir ./cache \
+#     \
+#     --lr 5e-5 \
+#     --block_size 256 \
+#     --epochs 0 \
+
+
 # coarse-grained
 python source/fine-tunning.py \
     --seed 99 \

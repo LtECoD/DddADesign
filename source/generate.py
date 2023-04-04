@@ -41,11 +41,16 @@ if __name__ == '__main__':
                      eos_token_id=0)
 
     # write into fasta
-    lines = [seq['generated_text'] for seq in sequences]
-    for idx, line in enumerate(lines):
+    idx = 0
+    lines = []
+    for seq in sequences:
+        line = seq['generated_text']
         assert line.startswith("<|endoftext|>")
-        if not line.endswith("\n"):
-            line = line + "\n"
-        lines[idx] = f">{model_name}-{idx}" + line[13:]
+        trunc_line = "\n" + line[13:].strip() + "\n"
+        if len(trunc_line) < 10:
+            continue
+        lines.append(f">{model_name}-{idx}" + trunc_line)
+        idx += 1
+
     with open(os.path.join(args.result_dir, model_name+".fasta"), "w") as f:
         f.writelines(lines) 
