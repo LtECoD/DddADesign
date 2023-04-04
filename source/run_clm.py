@@ -219,10 +219,12 @@ class DataTrainingArguments:
         else:
             if self.train_file is not None:
                 extension = self.train_file.split(".")[-1]
-                assert extension in ["csv", "json", "txt"], "`train_file` should be a csv, a json or a txt file."
+                # assert extension in ["csv", "json", "txt"], "`train_file` should be a csv, a json or a txt file."
             if self.validation_file is not None:
                 extension = self.validation_file.split(".")[-1]
-                assert extension in ["csv", "json", "txt"], "`validation_file` should be a csv, a json or a txt file."
+                # assert extension in ["csv", "json", "txt"], "`validation_file` should be a csv, a json or a txt file."
+        if extension == "fasta":
+            extension = "txt"
 
 
 def main():
@@ -332,7 +334,7 @@ def main():
             if data_args.train_file is not None
             else data_args.validation_file.split(".")[-1]
         )
-        if extension == "txt":
+        if extension == "txt" or extension == "fasta":
             extension = "text"
             dataset_args["keep_linebreaks"] = data_args.keep_linebreaks
         raw_datasets = load_dataset(
@@ -559,12 +561,6 @@ def main():
             preds = preds[:, :-1].reshape(-1)
             return metric.compute(predictions=preds, references=labels)
 
-    print(eval_dataset)
-    print(len(eval_dataset[0]["input_ids"]))
-    print(eval_dataset[0]["input_ids"][:10])
-    print(eval_dataset[0]["labels"][:10])
-
-    print(tokenizer.convert_ids_to_tokens(eval_dataset[0]["input_ids"][:10]))
 
     # Initialize our Trainer
     trainer = Trainer(
@@ -628,10 +624,10 @@ def main():
         else:
             kwargs["dataset"] = data_args.dataset_name
 
-    if training_args.push_to_hub:
-        trainer.push_to_hub(**kwargs)
-    else:
-        trainer.create_model_card(**kwargs)
+    # if training_args.push_to_hub:
+    #     trainer.push_to_hub(**kwargs)
+    # else:
+    #     trainer.create_model_card(**kwargs)
 
 
 def _mp_fn(index):

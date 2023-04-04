@@ -1,3 +1,4 @@
+import os
 import math
 import logging
 import argparse
@@ -36,7 +37,7 @@ def compute_metrics(eval_preds):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int)
-    parser.add_argument("--save_dir", type=str)
+    parser.add_argument("--save_dir", type=str, default="./save")
     parser.add_argument("--checkpoint", type=str)
     parser.add_argument("--train_file", type=str)
     parser.add_argument("--val_file", type=str)
@@ -47,6 +48,19 @@ if __name__ == '__main__':
     parser.add_argument("--log_dir", type=str, default="./log")
     args = parser.parse_args()
     set_seed(args.seed)
+
+    # re-direct checkpoint path and save directory
+    model_name = os.path.basename(args.checkpoint)
+    suffix = ""
+    if os.path.exists(args.checkpoint):
+        suffix = os.path.basename(args.checkpoint) + "+"
+        assert os.path.isdir(args.checkpoint)
+        for sub_path in os.listdir(args.checkpoint):
+            if sub_path.startswith("checkpoint"):
+                args.checkpoint = os.path.join(args.checkpoint, sub_path)
+                break
+    suffix = suffix + os.path.basename(args.train_file).split('.')[0]
+    args.save_dir = os.path.join(args.save_dir, suffix)
 
     # tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained(
@@ -77,7 +91,8 @@ if __name__ == '__main__':
     raw_datasets = load_dataset(
         "text",
         data_files=data_files,
-        cache_dir=args.cache_dir)
+        cache_dir=args.cache_dir,
+        keep_linebreaks=True)
     column_names = raw_datasets['train'].features
     tokenized_datasets = raw_datasets.map(
         lambda x: tokenizer(x["text"]), batched=True,
@@ -113,14 +128,14 @@ if __name__ == '__main__':
     train_result = trainer.train()
     trainer.save_model()
     metrics = train_result.metrics
-    metrics["train_samples"] = len(trainset['train'])
+    metrics["train_samples"] = len(trainset)
     trainer.log_metrics("train", metrics)
     trainer.save_metrics("train", metrics)
     trainer.save_state()
 
     logger.info("*** Evaluate ***")
     metrics = trainer.evaluate()
-    metrics["eval_samples"] = len(valset['val'])
+    metrics["eval_samples"] = len(valset)
     try:
         perplexity = math.exp(metrics["eval_loss"])
     except OverflowError:
