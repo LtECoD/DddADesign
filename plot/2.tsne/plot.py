@@ -35,27 +35,55 @@ if __name__ == '__main__':
     g.xaxis.label.set_visible(False)
     g.yaxis.label.set_visible(False)
 
-    # find ddda index manually in the IPR032724.fasta
-    # 145 311 544 three same sequences
-    ddda_index = 544
-    ddda_x = df.loc[ddda_index, "Dim1"]
-    ddda_y = df.loc[ddda_index, "Dim2"]
-    g.annotate(
-        text="DddA",
-        xy=(ddda_x, ddda_y),
-        textcoords="offset points",
-        xytext=(15, 15),
-        arrowprops={
-            "width": 1,
-            "headwidth": 4,
-            "headlength": 5,
-            "facecolor": "black"
-        },
-        fontproperties=font
-    )
+
+    # activate sequences
+    import math
+    pi = math.pi
+    activate_idx_name = [
+        (-1, "DddA", 5, 15),
+        (-5, "Q2L7", 5, -20),
+        (-8, "FZY2", -30, -20),
+        (-11, "SA071", 15, -20),
+        (-12, "SA046", -30, 15),
+        (-18, "SA093", -30, 15)
+    ]
+    for idx, name, tx, ty in activate_idx_name:
+        _index = len(df) + idx
+        x = df.loc[_index, "Dim1"]
+        y = df.loc[_index, "Dim2"]
+        g.annotate(
+            text=name,
+            xy=(x, y),
+            textcoords="offset points",
+            xytext=(tx, ty),
+            arrowprops={
+                "width": 1,
+                "headwidth": 4,
+                "headlength": 5,
+                "facecolor": "black"
+            },
+            fontproperties=font
+        )
+
+    # ddda_index = len(df)-1
+    # ddda_x = df.loc[ddda_index, "Dim1"]
+    # ddda_y = df.loc[ddda_index, "Dim2"]
+    # g.annotate(
+    #     text="DddA",
+    #     xy=(ddda_x, ddda_y),
+    #     # textcoords="offset points",
+    #     # xytext=(15, 15),
+    #     # arrowprops={
+    #     #     "width": 1,
+    #     #     "headwidth": 4,
+    #     #     "headlength": 5,
+    #     #     "facecolor": "black"
+    #     # },
+    #     fontproperties=font
+    # )
 
     handles, labels = g.get_legend_handles_labels()
-    legends = g.legend(handles=handles[:5], labels=labels[:5], frameon=False).get_texts()
+    legends = g.legend(handles=handles[:6], labels=labels[:6], frameon=False).get_texts()
     for leg in legends:
         leg.set_fontproperties(font)
         # leg.set_size(15)
