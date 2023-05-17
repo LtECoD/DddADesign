@@ -16,6 +16,7 @@ if __name__ == '__main__':
 
     df = pd.DataFrame(columns=["Model", "Overlap Length", "Identity", "BS"])
 
+    models_num = len(args.model_name) + 1
     for name in args.model_name:
         lines = open(os.path.join(args.data_dir, name+".csv"), "r").readlines()
         for l in lines:
@@ -52,7 +53,7 @@ if __name__ == '__main__':
     plt.xlabel("Overlap Length", fontproperties=font, fontsize=12)
     
     handles, labels = g.get_legend_handles_labels()
-    legends = g.legend(handles=handles[:5], labels=labels[:5], frameon=False).get_texts()
+    legends = g.legend(handles=handles[:models_num], labels=labels[:models_num], frameon=False).get_texts()
     for leg in legends:
         leg.set_fontproperties(font)
         # leg.set_size(15)

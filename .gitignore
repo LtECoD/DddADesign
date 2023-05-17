@@ -3,6 +3,7 @@ cache/
 data/raw/
 save/
 *.npy
+*.pkl
 
 plot_data/
 seqdb/

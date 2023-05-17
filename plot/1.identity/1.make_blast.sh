@@ -1,16 +1,17 @@
 #! /bin/bash
 
-SELFDIR=./plot/1.align_score
+SELFDIR=./plot/1.identity
 
 # make blast db from fasta file
 DBFASTA=IPR032724
-makeblastdb \
-    -in ${SELFDIR}/seqs/${DBFASTA}.fasta \
-    -dbtype prot \
-    -out ${SELFDIR}/seqdb/${DBFASTA}
+# makeblastdb \
+#     -in ${SELFDIR}/seqs/${DBFASTA}.fasta \
+#     -dbtype prot \
+#     -out ${SELFDIR}/seqdb/${DBFASTA}
 
 # # blast align file
-for MODELNAME in ProtGPT2 IPR035105 IPR035105+meta2k meta2k;
+# for MODELNAME in ProtGPT2 IPR035105 IPR035105+meta2k meta2k;
+for MODELNAME in IPR002125 IPR002125+IPR035105 IPR002125+IPR035105+meta2k;
 do
     blastp \
         -query ${SELFDIR}/seqs/generated_${MODELNAME}.fasta \
@@ -23,7 +24,8 @@ do
 done
 
 # extract info
-for MODELNAME in ProtGPT2 IPR035105 IPR035105+meta2k meta2k;
+# for MODELNAME in ProtGPT2 IPR035105 IPR035105+meta2k meta2k;
+for MODELNAME in IPR002125 IPR002125+IPR035105 IPR002125+IPR035105+meta2k;
 do
     python ${SELFDIR}/extract_blast_info.py \
         --blast ${SELFDIR}/blast_result/${MODELNAME}.blast \

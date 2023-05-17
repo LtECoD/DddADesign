@@ -1,4 +1,5 @@
 import os
+import pickle
 import argparse
 import numpy as np
 import pandas as pd
@@ -15,10 +16,14 @@ if __name__ == '__main__':
 
     data = []
     labels = []
+    names = []
     for model in args.model_name:
-        embs = np.load(os.path.join(args.emb_dir, model+".npy"))
+        with open(os.path.join(args.emb_dir, model+".pkl"), "rb") as f:
+            embs, pronames = pickle.load(f)
         data.append(embs)
         labels.extend([model]*embs.shape[0])
+        names.extend(pronames)
+        assert embs.shape[0] == len(pronames)
     data = np.vstack(data)
 
     # active sequences
@@ -31,10 +36,11 @@ if __name__ == '__main__':
         learning_rate=200,
         n_iter=2000).fit_transform(data)
     
-    df = pd.DataFrame(columns=["Dim1", "Dim2", "Label"])
+    df = pd.DataFrame(columns=["Dim1", "Dim2", "Label", "Name"])
     df["Dim1"] = data_reduced[:, 0]
     df["Dim2"] = data_reduced[:, 1]
     df["Label"] = labels
+    df["Name"] = names
     df.to_csv(args.out, index=False)
 
 

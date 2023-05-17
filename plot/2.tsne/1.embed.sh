@@ -10,7 +10,7 @@ do
         --device 0 \
         --batch_size 32 \
         --fasta ${SELFDIR}/seqs/generated_${MODELNAME}.fasta \
-        --out ${SELFDIR}/embs_prott5/${MODELNAME}.npy
+        --out ${SELFDIR}/embs_prott5/${MODELNAME}.pkl
 done
 
 python ${SELFDIR}/embed.py \
@@ -18,23 +18,23 @@ python ${SELFDIR}/embed.py \
     --device 0 \
     --batch_size 32 \
     --fasta ${SELFDIR}/seqs/IPR032724.fasta \
-    --out ${SELFDIR}/embs_prott5/IPR032724r.npy
+    --out ${SELFDIR}/embs_prott5/IPR032724r.pkl
 
 
-# PTLM=Rostlab/prot_bert
-# for MODELNAME in ProtGPT2 IPR035105 IPR035105+meta2k meta2k;
-# do
-#     python ${SELFDIR}/embed.py \
-#         --pretrained_model ${PTLM} \
-#         --device 0 \
-#         --batch_size 32 \
-#         --fasta ${SELFDIR}/seqs/generated_${MODELNAME}.fasta \
-#         --out ${SELFDIR}/embs_protbert/${MODELNAME}.npy
-# done
+PTLM=Rostlab/prot_bert
+for MODELNAME in ProtGPT2 IPR035105 IPR035105+meta2k meta2k;
+do
+    python ${SELFDIR}/embed.py \
+        --pretrained_model ${PTLM} \
+        --device 0 \
+        --batch_size 32 \
+        --fasta ${SELFDIR}/seqs/generated_${MODELNAME}.fasta \
+        --out ${SELFDIR}/embs_protbert/${MODELNAME}.pkl
+done
 
-# python ${SELFDIR}/embed.py \
-#     --pretrained_model ${PTLM} \
-#     --device 0 \
-#     --batch_size 32 \
-#     --fasta ${SELFDIR}/seqs/IPR032724.fasta \
-#     --out ${SELFDIR}/embs_protbert/IPR032724r.npy
+python ${SELFDIR}/embed.py \
+    --pretrained_model ${PTLM} \
+    --device 0 \
+    --batch_size 32 \
+    --fasta ${SELFDIR}/seqs/IPR032724.fasta \
+    --out ${SELFDIR}/embs_protbert/IPR032724r.pkl

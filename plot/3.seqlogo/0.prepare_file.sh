@@ -4,7 +4,7 @@ SELFDIR=./plot/3.seqlogo
 
 cp ./data/raw/active_sequences.fasta ./plot/3.seqlogo/seqs
 
-for MODELNAME in ProtGPT2 IPR035105 IPR035105+meta2k meta2k;
+for MODELNAME in IPR035105 IPR035105+meta2k meta2k ;
 do
     python ${SELFDIR}/select_generated_seqs.py \
         --seed 100 \

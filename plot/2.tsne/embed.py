@@ -1,10 +1,12 @@
 import os
 import re
 import torch
+import pickle
 import shutil
 import argparse
 import numpy as np
 import torch.nn as nn
+from Bio import SeqIO
 
 from transformers import T5EncoderModel, T5Tokenizer
 from transformers import BertModel, BertTokenizer
@@ -47,17 +49,12 @@ if __name__ == '__main__':
         embeder = embeder.to(args.device)
     
     # read file
-    samples = []
-    with open(args.fasta, "r") as f:
-        lines = f.readlines()
-        for idx in range(0, len(lines), 2):
-            _id = lines[idx].strip()[1:]
-            seq = lines[idx+1].strip()
-            seq = re.sub(r"[UZOB]", "X", seq)
-            samples.append((_id, seq))
+    records = SeqIO.parse(args.fasta, format="fasta")
+    samples = [(rec.id, rec.seq) for rec in records]
 
     # emb
     embeds = []
+    pronames = []
     def process_buffer():
         pros = [s[0].strip() for s in buffer]
         seqs = [" ".join(s[1]) for s in buffer]
@@ -80,6 +77,7 @@ if __name__ == '__main__':
                 seq_emb = embedding[idx][1:seq_len-1]
             pool_seq_emb = np.mean(seq_emb, axis=0)
             embeds.append(pool_seq_emb)
+            pronames.append(pros[idx])
             # np.save(os.path.join(args.out, pros[idx]+".npy"), pool_seq_emb)
 
     buffer = []
@@ -95,5 +93,6 @@ if __name__ == '__main__':
         process_buffer()
         processed_num += len(buffer)
         buffer = []
-    np.save(args.out, np.vstack(embeds))
+    with open(args.out, "wb") as f:
+        pickle.dump((np.vstack(embeds), pronames), f)
     print(f">>>>> Processed {processed_num} proteins.")

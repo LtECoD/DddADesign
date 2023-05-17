@@ -14,6 +14,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     df = pd.read_csv(args.data)
+    model_num = len(set(df["Label"]))
     print(df)
 
     font_size = 14
@@ -41,11 +42,21 @@ if __name__ == '__main__':
     pi = math.pi
     activate_idx_name = [
         (-1, "DddA", 5, 15),
+        (-2, "XYI6", -40, 10),
+        (-3, "XG57", 15, 30),
+        (-4, "WC03", 20, 10),
         (-5, "Q2L7", 5, -20),
-        (-8, "FZY2", -30, -20),
-        (-11, "SA071", 15, -20),
-        (-12, "SA046", -30, 15),
-        (-18, "SA093", -30, 15)
+        (-6, "L9D3", -15, 15),
+        (-7, "HR14", -30, 15),
+        (-8, "FZY2", -50, 0),
+        (-9, "SA071", -30, 10),
+        (-10, "SA046", 15, 5),
+        (-11, "GA012", 15, -20),
+        (-12, "SA143", -40, -15),
+        (-13, "SA112", 30, -15),
+        (-14, "JG001", -45, 0),
+        (-15, "SA031", 5, 15),
+        (-16, "SA093", 15, -15)
     ]
     for idx, name, tx, ty in activate_idx_name:
         _index = len(df) + idx
@@ -83,7 +94,7 @@ if __name__ == '__main__':
     # )
 
     handles, labels = g.get_legend_handles_labels()
-    legends = g.legend(handles=handles[:6], labels=labels[:6], frameon=False).get_texts()
+    legends = g.legend(handles=handles[:model_num], labels=labels[:model_num], frameon=False).get_texts()
     for leg in legends:
         leg.set_fontproperties(font)
         # leg.set_size(15)

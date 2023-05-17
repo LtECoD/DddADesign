@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# IPR002125
+python ./data/preprocess_interpro.py \
+    --fasta ./data/raw/protein-matching-IPR002125.fasta \
+    --tsv ./data/raw/protein-matching-IPR002125.tsv \
+    --out ./data/processed/IPR002125.fasta \
+    --extend 50
+
 # IPR032724 DddA-like 500+
 python ./data/preprocess_interpro.py \
     --fasta ./data/raw/protein-matching-IPR032724.fasta \
@@ -14,9 +21,9 @@ python ./data/preprocess_interpro.py \
     --out ./data/processed/IPR035105.fasta \
     --extend 50
 
-# # IPR002125 Cytidine and deoxycytidylate deaminase domain, 18w+
-# python ./data/preprocess_interpro.py \
-#     --fasta ./data/raw/protein-matching-IPR002125.fasta \
-#     --tsv ./data/raw/protein-matching-IPR002125.tsv \
-#     --out ./data/processed/IPR002125.fasta \
-#     --extend 50
+# IPR002125 Cytidine and deoxycytidylate deaminase domain, 18w+
+python ./data/preprocess_interpro.py \
+    --fasta ./data/raw/protein-matching-IPR002125.fasta \
+    --tsv ./data/raw/protein-matching-IPR002125.tsv \
+    --out ./data/processed/IPR002125.fasta \
+    --extend 50
